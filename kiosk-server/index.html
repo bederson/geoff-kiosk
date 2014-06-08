@@ -1,0 +1,23 @@
+<html>
+<head>
+	<title>Kiosk Home</title>
+	<script src="/js/jquery-2.1.1.min.js"></script>
+	<script src="/js/kiosk.js"></script>
+	<script type="text/javascript">
+		init_kiosk("{{ side1_url }}");
+	</script>
+</head>
+<body>
+	Geoff's Kiosk Home
+	<div id="info"></div>
+	<p>
+	<a href="javascript:void(0)" onclick="navigate('http://www.nytimes.com');">Click</a>
+	to load side1 w/ NYT
+	<br>
+	<a href="javascript:void(0)" onclick="navigate('http://qupq.com/images/front2.jpg');">Click</a>
+	to load side1 w/ QupQ image
+	<br>
+	<a href="p2.html" onclick="navigate('http://www.yahoo.com');">Click</a>
+	to naviate and load side1 w/ Yahoo
+</body>
+</html>
