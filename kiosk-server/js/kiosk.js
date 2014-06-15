@@ -1,14 +1,13 @@
-// host_url = "ws://localhost:9222/devtools/page/33A01BA9-C7E0-A9CB-BECA-34F2252D21E2"
-// var socket = new WebSocket(host_url);
-
-// setTimeout(function(){navigate('http:www.yahoo.com')}, 1000);
-
 var side1_socket = "";
 
-function init_kiosk(side1_url) {
-	if (side1_url != "") {
-		side1_socket = new WebSocket(side1_url);
-	}
+function init_kiosk(side1_ip) {
+	side1_url = "http://" + main_ip + ":" + main_port + "/get_socket?ip=" + side1_ip + ":" + side1_port + "&port=9222";
+	$.get(side1_url, function(data) {
+		console.log(data);
+		side1_socket_url = data.replace("localhost:9222", side1_ip + ":" + side1_chrome_port);
+		console.log(side1_socket_url);
+		var side1_socket = new WebSocket(side1_socket_url);
+	});
 }
 
 function navigate(url) {
@@ -19,6 +18,7 @@ function navigate(url) {
 }
 
 $(document).ready(function() {
+	init_kiosk(side1_ip)
 	if (side1_socket == "") {
 		$("#info").html("<h1>Unable to connect to side pages</h1>");
 	} else {

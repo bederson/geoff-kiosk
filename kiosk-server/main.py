@@ -29,10 +29,18 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 class SocketHandler(webapp2.RequestHandler):
     def get(self):
+        ip = self.request.get("ip")
         port = self.request.get("port")
         if port:
-            socket_url = getSocket(port, "json")
-            self.response.write(socket_url)
+            if ip:
+                url = "http://" + ip + "/get_socket?port=" + port
+                logging.debug("url = " + url)
+                result = urllib2.urlopen(url)
+                data = result.read()
+                self.response.write(data)
+            else:
+                socket_url = getSocket(port, "json")
+                self.response.write(socket_url)
     
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -42,6 +50,8 @@ class MainHandler(webapp2.RequestHandler):
         template_values = {'side1_url': socketUrl}
         url = self.request.url
         file = url[url.index("/", 7):]
+        if len(file) <= 1:
+            file = "/index.html"
         template = JINJA_ENVIRONMENT.get_template(file)
         self.response.write(template.render(template_values))
 
