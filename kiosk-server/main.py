@@ -36,8 +36,9 @@ class SocketHandler(webapp2.RequestHandler):
     
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        side1_port = "9223"
-        socketUrl = getSocket(side1_port, "json")
+        # side1_port = "9223"
+        # socketUrl = getSocket(side1_port, "json")
+        socketUrl = ""
         template_values = {'side1_url': socketUrl}
         url = self.request.url
         file = url[url.index("/", 7):]
