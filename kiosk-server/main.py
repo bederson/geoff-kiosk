@@ -28,13 +28,14 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        data = self.getSocket("9223", "json")
+        side1_port = "9223"
+        data = self.getSocket(side1_port, "json")
         dataj = json.loads(data)
         socketUrl = ""
         tab = dataj[0]
         if 'id' in tab:
             logging.debug("Success: tab = " + str(tab))
-            socketUrl = "ws://localhost:9223/devtools/page/" + tab['id']
+            socketUrl = "ws://localhost:" + side1_port + "/devtools/page/" + tab['id']
         else:
             logging.debug("Error: tab = " + str(tab))
         template_values = {'side1_url': socketUrl}
