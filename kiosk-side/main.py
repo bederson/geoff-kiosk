@@ -21,55 +21,41 @@ import urllib2
 import logging
 import json
 import socket
+import random
+from google.appengine.api import channel
+from google.appengine.ext import db
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
-
-class SocketHandler(webapp2.RequestHandler):
-    def get(self):
-        ip = self.request.get("ip")
-        port = self.request.get("port")
-        if port:
-            if ip:
-                url = "http://" + ip + "/get_socket?port=" + port
-                logging.debug("url = " + url)
-                result = urllib2.urlopen(url)
-                data = result.read()
-                self.response.write(data)
-            else:
-                socket_url = getSocket(port, "json")
-                self.response.write(socket_url)
     
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        # side1_port = "9223"
-        # socketUrl = getSocket(side1_port, "json")
-        socketUrl = ""
-        template_values = {'side1_url': socketUrl}
-        url = self.request.url
-        file = url[url.index("/", 7):]
-        if len(file) <= 1:
-            file = "/index.html"
-        logging.debug("file = " + file)
-        template = JINJA_ENVIRONMENT.get_template(file)
+        client_id = "12345"
+        token = channel.create_channel(client_id)
+        
+        template_values = {
+            'token': token
+        }
+        template = JINJA_ENVIRONMENT.get_template("init.html")
         self.response.write(template.render(template_values))
 
 class NavigateHandler(webapp2.RequestHandler):
     def get(self):
         port = self.request.get("port")
         url = self.request.get("url")
+
         socket_url = getSocket(port)
         logging.debug("SOCKET URL = " + socket_url)
         logging.debug("URL = " + url)
         
-        template_values = {
+        msg = {
             'socket_url': socket_url,
             'url': url
         }
-        template = JINJA_ENVIRONMENT.get_template("navigate.html")
-        self.response.write(template.render(template_values))
+        
+        channel.send_message("12345", json.dumps(msg))
 
 def getSocket(port):
     url = "http://localhost:" + port + "/json"
@@ -88,8 +74,7 @@ def getSocket(port):
         logging.debug("URL error: " + e)
         
 app = webapp2.WSGIApplication([
-    ('/get_socket', SocketHandler),
+    ('/', MainHandler),
     ('/navigate', NavigateHandler),
-    ('/.*', MainHandler)
 ], debug=True)
 

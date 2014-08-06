@@ -1,0 +1,45 @@
+<html>
+	<head>
+	    <script type="text/javascript" src='/_ah/channel/jsapi'></script>
+	    <script src="/js/jquery-2.1.1.min.js"></script>
+	    <script src="/js/kiosk.js"></script>
+	</head>
+
+	<body>
+		This page must stay loaded to redirect chrome.
+
+		<script>
+			onOpen = function() {
+				console.log("CHANNEL OPEN");
+			}
+
+			onMessage = function(m) {
+				console.log("CHANNEL MSG RCVD");
+				msg_data = JSON.parse(m.data);
+				socket_url = msg_data.socket_url;
+				url = msg_data.url;
+				navigate(socket_url, url);
+			}
+		
+			onError = function() {
+				console.log("CHANNEL ERROR");
+			}
+
+			onClose = function() {
+				console.log("CHANNEL CLOSE");
+			}
+
+			var handler = {
+				'onopen': onOpen,
+				'onmessage': onMessage,
+				'onerror': onError,
+				'onclose': onClose
+			};
+
+			token = '{{ token }}';
+			var channel = new goog.appengine.Channel(token);
+			var socket = channel.open(handler);
+			console.log(token);
+		</script>
+	</body>
+</html>
