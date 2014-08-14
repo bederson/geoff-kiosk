@@ -9,14 +9,17 @@
 	Geoff's Kiosk Home
 	<div id="info"></div>
 	<p>
-	<a href="javascript:void(0)" onclick="navigate('http://www.nytimes.com');">Click</a>
+	<a href="javascript:void(0)" onclick="navigate(1, 'http://www.nytimes.com');">Click</a>
 	to load side1 w/ NYT
 	<br>
-	<a href="javascript:void(0)" onclick="navigate('http://qupq.com/images/front2.jpg');">Click</a>
-	to load side1 w/ QupQ image
+	<a href="javascript:void(0)" onclick="navigate(2, 'http://qupq.com/images/front2.jpg');">Click</a>
+	to load side2 w/ QupQ image
+	<br>
+	<a href="javascript:void(0)" onclick="navigate(1, 'http://www.umd.edu'); navigate(2, 'http://www.google.com');">Click</a>
+	to load side1 w/ UMD and side2 with Google
 	<br>
 	<a href="javascript:void(0)" 
-	onclick="navigate('http://www.yahoo.com', 'p2.html');">Click</a>
+	onclick="navigate(1, 'http://www.yahoo.com', 'p2.html');">Click</a>
 	to navigate and load side1 w/ Yahoo
 </body>
 </html>
